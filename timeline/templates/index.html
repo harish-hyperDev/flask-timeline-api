@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+
+    <!-- Importing colors for circles -->
+    <script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-scale-chromatic@3"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/d3-time-format@4"></script>
+
+    <style>
+        /* body div {
+            margin: 5px 0px;
+        } */
+
+        * {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 15px;
+        }
+
+        .tooltip {
+            border: 1px solid rgb(203, 203, 203);
+            line-height: 1.6;
+            /* white-space: pre-wrap; */
+        }
+
+        .computer-names {
+            margin-top: 10px;
+            margin-left: 2.7%;
+        }
+
+
+        .ui-resizable-handle {
+            display: flex;
+            justify-content: right;
+            float: right;
+
+            width: 1px;
+            height: 100%;
+            padding: 5px;
+
+            /* background-image: url('../assets/triangle-top-left-icon\ \(1\).png'); */
+            background-repeat: no-repeat;
+            transform: rotate(180deg);
+            margin: 0px 1px 1px 0px;
+            /* border: 1px solid black; */
+            border-left: 2px solid black;
+            border-top: 2px solid black;
+
+        }
+
+        .ui-resizable-handle:hover {
+            cursor: e-resize;
+        }
+    </style>
+</head>
+
+<body>
+</body>
+<!-- <script src="./timeline.js"></script> -->
+<script src="{{url_for('static', filename='timeline.js')}}"></script>
+
+
+
+</html>
