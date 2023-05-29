@@ -84,10 +84,7 @@ d3.json("/static/originalData.json", async function (err, data) {
     width = current_width - margin.left - margin.right
     height = current_height;
 
-    
-
-    for (let multidata_index = 0; multidata_index < uniqueComputers.length; multidata_index++) {
-
+    function chart(multidata_index) {
         /* {
             "InstallDate": "07 May 2022 12:56 PM",
             "ComputerName": "DESKTOP-BTTOPL3",
@@ -265,21 +262,28 @@ d3.json("/static/originalData.json", async function (err, data) {
             calledRedraw++;
         })
 
-
-        /* document.querySelector(`.timeline${multidata_index}`)
-                .addEventListener("resize", () => { 
-                    
-                    $('body').prepend('<div>' + $(`.timeline${multidata_index}`).width() + '</div>');
-                }) */
-
-
         // changing width w.r.t to div's width
         width = $(`.timeline${multidata_index}`).width() - margin.right
 
 
         if(!calledRedraw) {
             reDraw(uniqueComputers[multidata_index])
+            console.log("re draw")
+            console.log(uniqueComputers[multidata_index])
+            console.log("multi data index : ", multidata_index)
         }
-
     }
+
+    if(fid == 0) {
+        for (let multidata_index = 0; multidata_index < uniqueComputers.length; multidata_index++) {
+            chart(multidata_index)
+        }
+    } else {
+        let idOnUrl = fid;
+        console.log("computers unique : ", uniqueComputers)
+        let indexOfUrlInJsonData = uniqueComputers.indexOf(idOnUrl)
+
+        chart(indexOfUrlInJsonData)
+    }
+
 })

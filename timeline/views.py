@@ -9,6 +9,6 @@ def home():
 def test():
     return 'test'
 
-@app.route('/test/<id>', methods=['GET', 'POST'])
+@app.route('/<id>', methods=['GET', 'POST'])
 def test_id(id):
     return render_template('index.html', id = id)
