@@ -21,6 +21,7 @@ d3.csv("/static/data.csv", async function (err, data) {
 
     console.log("data is : ", data)
     let uniqueComputers = getUniqueData("Opportunity ID").sort()
+    console.log("unique opp ids : ", uniqueComputers)
 
 
     // let filterOppur = []
@@ -174,14 +175,14 @@ d3.csv("/static/data.csv", async function (err, data) {
                     width = changed_width
 
                     svg = d3.select(`.timeline${chart_index}`)
-                        .append("div")
-                        .attr("id", `timeline-chart${chart_index}`)
-                        .append("svg")
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .append("g")
-                        .attr("class", "fishy")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                            .append("div")
+                            .attr("id", `timeline-chart${chart_index}`)
+                            .append("svg")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                            .append("g")
+                            .attr("class", "fishy")
+                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
                     // removind and re-adding the resizable
@@ -196,17 +197,19 @@ d3.csv("/static/data.csv", async function (err, data) {
                 } else return       // else, exit from the reDraw function, aids in performance
             }
 
-            var x = d3.scaleTime()
-                // .domain(d3.extent(filteredTimeline, function (d) { console.log("on x : ", d.validDatesWithData); return parseDate(d.validDatesWithData); }))
-                .domain(d3.extend(filteredTimeline, function (d) {
-                    let validDate = isValidDate()
-                    if (validDate && fields[fieldKey] !== "") {
+            console.log("chart id : ", chart_id)
 
-                        console.log(fieldKey)
-                        eachField['validDatesWithData'] = [...eachField['validDatesWithData'], fieldKey]
-                        eachField[fieldKey] = fields[fieldKey]
-                    }
-                }))
+            var x = d3.scaleTime()
+                .domain(d3.extent(filteredTimeline, function (d) { console.log("on x : ", d.validDatesWithData); return parseDate(d.validDatesWithData); }))
+                // .domain(d3.extent(filteredTimeline, function (d) {
+                //     let validDate = isValidDate()
+                //     if (validDate && fields[fieldKey] !== "") {
+
+                //         console.log(fieldKey)
+                //         eachField['validDatesWithData'] = [...eachField['validDatesWithData'], fieldKey]
+                //         eachField[fieldKey] = fields[fieldKey]
+                //     }
+                // }))
                 .range([0, width - margin.left - margin.right]);
 
             var xAxis = d3.axisBottom(x)
