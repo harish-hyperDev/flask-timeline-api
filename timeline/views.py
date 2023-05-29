@@ -10,5 +10,5 @@ def test():
     return 'test'
 
 @app.route('/<id>', methods=['GET', 'POST'])
-def test_id(id):
+def api_id(id):
     return render_template('index.html', id = id)
