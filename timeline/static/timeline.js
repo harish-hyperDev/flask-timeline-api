@@ -1,8 +1,8 @@
 let parseTime = d3.timeParse("%d %b %Y %H:%M %p");
-// 
 
+console.log("id is : ", fid)
 
-d3.json("static/originalData.json", async function (err, data) {
+d3.json("/static/originalData.json", async function (err, data) {
 
     if (err)
         console.log("Error fetching data!!!")
@@ -72,16 +72,6 @@ d3.json("static/originalData.json", async function (err, data) {
             .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
                 "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
 
-
-    /* 
-
-    
-    
-
-    
-     */
-
-
     var margin = { top: 20, right: 20, bottom: 30, left: 50 }
 
     current_width = window.innerWidth;
@@ -118,6 +108,10 @@ d3.json("static/originalData.json", async function (err, data) {
             filteredTimeline = data.filter((d, i) => {
                 return d["ComputerName"] === param
             })
+
+            console.log("Filter Timeline")
+            console.log(filteredTimeline)
+            console.log("params : ", param)
 
             
 

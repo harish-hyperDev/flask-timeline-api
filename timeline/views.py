@@ -11,4 +11,4 @@ def test():
 
 @app.route('/test/<id>', methods=['GET', 'POST'])
 def test_id(id):
-    return id
+    return render_template('index.html', id = id)
