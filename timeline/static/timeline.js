@@ -1,5 +1,6 @@
 let parseTime = d3.timeParse("%d %b %Y %H:%M %p");
-let parseDate = d3.timeParse("%Y-%b-%d");
+let parseDate = d3.timeParse("%Y-%m-%d");
+
 
 console.log("id is : ", fid)
 
@@ -21,7 +22,8 @@ d3.csv("/static/data.csv", async function (err, data) {
 
     console.log("data is : ", data)
     let uniqueComputers = getUniqueData("Opportunity ID").sort()
-    console.log("unique opp ids : ", uniqueComputers)
+
+    // console.log("unique opp ids : ", uniqueComputers)
 
 
     // let filterOppur = []
@@ -41,7 +43,6 @@ d3.csv("/static/data.csv", async function (err, data) {
                 eachField[fieldKey] = fields[fieldKey]
             }
             if (validDate && fields[fieldKey] !== "") {
-                console.log(fieldKey)
                 eachField['validDatesWithData'] = [...eachField['validDatesWithData'], fieldKey]
                 eachField[fieldKey] = fields[fieldKey]
             }
@@ -54,8 +55,8 @@ d3.csv("/static/data.csv", async function (err, data) {
 
 
 
-    console.log("filter by OPP : ")
-    console.log(filterByOppurtunities)
+    // console.log("filter by OPP : ")
+    // console.log(filterByOppurtunities)
 
 
     // let uniqueUpdates = await data.map((d) => {
@@ -80,7 +81,7 @@ d3.csv("/static/data.csv", async function (err, data) {
     let uniqueUpdates = ["hello", "hello", "world", "world"]
 
     uniqueOppurtunityID = [...new Set(data['OppurtunityID'])]
-    console.log("opp id : ", uniqueOppurtunityID)
+    // console.log("opp id : ", uniqueOppurtunityID)
 
 
     const getMyColor = (colorsLength) => {
@@ -157,8 +158,8 @@ d3.csv("/static/data.csv", async function (err, data) {
                 return d["Opportunity ID"] === param
             })
 
-            console.log("Filter Timeline")
-            console.log(filteredTimeline)
+            // console.log("Filter Timeline")
+            // console.log(filteredTimeline)
             console.log("params : ", param)
 
 
@@ -197,10 +198,13 @@ d3.csv("/static/data.csv", async function (err, data) {
                 } else return       // else, exit from the reDraw function, aids in performance
             }
 
-            console.log("chart id : ", chart_id)
+            // console.log("chart id : ", chart_id)
 
             var x = d3.scaleTime()
-                .domain(d3.extent(filteredTimeline, function (d) { console.log("on x : ", d.validDatesWithData); return parseDate(d.validDatesWithData); }))
+                    .domain([d3.min(filteredTimeline, function (d) { let min_date = d3.min(d.validDatesWithData); return parseDate(min_date); }),
+                            d3.max(filteredTimeline, function(d) { let max_date = d3.max(d.validDatesWithData); return parseDate(max_date); })
+                    ])
+                // .domain(d3.extent(filteredTimeline, function (d) { console.log("on x : ", d3.min(d.validDatesWithData)); return parseDate(d.validDatesWithData); }))
                 // .domain(d3.extent(filteredTimeline, function (d) {
                 //     let validDate = isValidDate()
                 //     if (validDate && fields[fieldKey] !== "") {
@@ -216,12 +220,14 @@ d3.csv("/static/data.csv", async function (err, data) {
 
             /* d3.selectAll(".dot").remove()
             d3.selectAll(".x-axis").remove() */
+            // console.log("the filter : ", filteredTimeline)
 
+            
             svg.selectAll(".dot")
                 .data(filteredTimeline)
                 .enter().append("circle")
                 .attr("class", "dot")
-                .attr("cx", function (d) { return x(parseDate(d.validDatesWithData)) })
+                // .attr("cx", function (...d.validDatesWithData) { console.log(d); return x(parseDate(d.validDatesWithData)) })
                 .attr("cy", function (d) { return (height) })
                 .attr("fill", "#fff")
                 .attr("r", 2.5)
@@ -265,10 +271,34 @@ d3.csv("/static/data.csv", async function (err, data) {
                     return tooltip.style("visibility", "hidden")
                 });
 
+            let validDatesArray = filteredTimeline[0]['validDatesWithData']
+            console.log("valid Dates : ", validDatesArray)
+
+            svg.selectAll('.dot')
+                .data(validDatesArray).enter().append("circle")
+                .attr("class", "dot")
+                // .enter().append("circle")
+                .attr("cx", function(d) { 
+                                // console.log("will : ", d); return 90; 
+                                console.log("will : ", x(parseDate(d)))
+                                return x(parseDate(d))
+                            })
+                .attr("cy", height)
+                .attr("fill", "#000")
+                .attr("r", 2.5)
+                
+
+                .attr("stroke-width", "1.5")
+
             svg.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
+
+
+            
+
+            
         }
 
 
