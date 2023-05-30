@@ -9,6 +9,10 @@ function isValidDate(dateString) {
     return dateString.match(regEx) != null;
 }
 
+function closeTooltip() {
+    document.getElementsByClassName("tooltip")[0]['style']['visibility'] = "hidden"
+}
+
 d3.csv("/static/data.csv", async function (err, data) {
 
     if (err) {
@@ -267,8 +271,10 @@ d3.csv("/static/data.csv", async function (err, data) {
                     //             <strong>Total Amount Required: </strong>${filteredTimeline[0]["Total Amount (Required)"]} <br/>
                     //         `);
 
-                    tooltip.html(`<div class="tooltip-text">${selectedDotDateText}</div>`)
+                    tooltip.html(`<div class="tooltip-close">X</div><div class="tooltip-text">${selectedDotDateText}<div>`)
 
+                    document.getElementsByClassName("tooltip-close")[0]["onclick"] = closeTooltip;
+                    
                     return tooltip.style("visibility", "visible");
                 })
 
@@ -279,13 +285,14 @@ d3.csv("/static/data.csv", async function (err, data) {
 
                 })
 
+                
                 // .on("mouseout", () => {
                 //     svg.selectAll(".dot").style("cursor", "default");
                 //     svg.select("path").style("cursor", "default");
                 //     return tooltip.style("visibility", "hidden")
                 // });
 
-            
+
 
             // svg.selectAll('.dot')
             //     .data(validDatesArray).enter().append("circle")
@@ -325,20 +332,26 @@ d3.csv("/static/data.csv", async function (err, data) {
             .attr("class", `timeline${multidata_index}`)
 
         // div for TITLE of chart
+
+        d3.select(`.timeline${multidata_index}`)        // div for "Opportunity ID"
+            .append("div")
+            .attr("class", `opp-id${multidata_index} computer-names`)
         
-        d3.select(`.timeline${multidata_index}`)
+        d3.select(`.timeline${multidata_index}`)        // div for "Account Name"
             .append("div")
             .attr("class", `acc-name${multidata_index} computer-names`)
 
-        d3.select(`.timeline${multidata_index}`)
+        d3.select(`.timeline${multidata_index}`)        // div for "Opportunity Name"
             .append("div")
             .attr("class", `opp-name${multidata_index} computer-names`)
         
 
         // TITLE of the chart
         console.log("text title : ", filteredTimeline)
-        document.getElementsByClassName(`opp-name${multidata_index}`)[0].innerHTML = `Opportunity Name: ${filteredTimeline[multidata_index]["Opportunity Name"]}`
+        document.getElementsByClassName(`opp-id${multidata_index}`)[0].innerHTML = `Opportunity ID: ${filteredTimeline[multidata_index]["Opportunity ID"]}`
         document.getElementsByClassName(`acc-name${multidata_index}`)[0].innerHTML = `Account Name: ${filteredTimeline[multidata_index]["Account Name"]}`
+        document.getElementsByClassName(`opp-name${multidata_index}`)[0].innerHTML = `Opportunity Name: ${filteredTimeline[multidata_index]["Opportunity Name"]}`
+
 
         // document.getElementsByClassName(`computer-id${multidata_index}`)[0].innerHTML = `Opportunity Name: ${uniqueComputers[multidata_index]}`
 
