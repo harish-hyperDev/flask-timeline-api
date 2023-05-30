@@ -10,7 +10,10 @@ function isValidDate(dateString) {
 }
 
 function closeTooltip() {
-    document.getElementsByClassName("tooltip")[0]['style']['visibility'] = "hidden"
+    d3.select('.tooltip')
+        .style("visibility", "hidden")
+    d3.select('.pointed-arrow')
+        .style("visibility", "hidden")
 }
 
 d3.csv("/static/data.csv", async function (err, data) {
@@ -275,6 +278,11 @@ d3.csv("/static/data.csv", async function (err, data) {
 
                     document.getElementsByClassName("tooltip-close")[0]["onclick"] = closeTooltip;
                     
+                    tooltipArrow.style("visibility", "visible")
+                                .style("top", (d3.event.pageY - 10) + "px")
+                                .style("left", (d3.event.pageX - 30) + "px");
+                                
+
                     return tooltip.style("visibility", "visible")
                                     .style("top", (d3.event.pageY + 25) + "px")
                                     .style("left", (d3.event.pageX - 15) + "px");  // was 15 before
@@ -319,6 +327,8 @@ d3.csv("/static/data.csv", async function (err, data) {
 
         }
 
+        var tooltipArrow= d3.select('.pointed-arrow')
+                            .style("visibility", "hidden")
 
         var tooltip = d3.select(".tooltip")
                         .style("position", "absolute")
