@@ -8,14 +8,7 @@ app = Flask(__name__)
 # Home for multi timelines
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    df = pd.read_csv('static/data.csv')
-    data = df.to_json(orient='records')
-    
-    data_to_dict = json.loads(data)[0]
-    
-    # print(type(json.loads(data)[0]))
-    print(data_to_dict)
-    return render_template('index.html', json_data = json.dumps(data_to_dict))
+    return render_template('index.html')
 
 
 # Needs to be implemented
@@ -40,7 +33,6 @@ def send_data():
     
     data_to_dict = json.loads(data)[0]
     
-    print(type(data_to_dict))
     return jsonify(data_to_dict)
 
 
