@@ -1,3 +1,5 @@
-timeline/static/data.csv
-timeline/static/originalData.json
+static/data.csv
+static/originalData.json
 *.csv#
+*.csv
+*.json

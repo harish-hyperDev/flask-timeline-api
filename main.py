@@ -1,30 +1,47 @@
 import pandas as pd
-from flask import Flask, render_template
+import json
+from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
 
+
+# Home for multi timelines
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    df = pd.read_csv('filename.csv')
+    df = pd.read_csv('static/data.csv')
     data = df.to_json(orient='records')
     
-    print(data)
-    return render_template('index.html')
+    data_to_dict = json.loads(data)[0]
+    
+    # print(type(json.loads(data)[0]))
+    print(data_to_dict)
+    return render_template('index.html', json_data = json.dumps(data_to_dict))
 
+
+# Needs to be implemented
 @app.route('/<opp_id>/<type>', methods=['GET', 'POST'])
-def home():
+def api():
     df = pd.read_csv('filename.csv')
     data = df.to_json(orient='records')
     return render_template('index.html')
 
-@app.route('/test', methods=['GET'])
-def test():
-    return 'test'
 
+# Working fine
 @app.route('/<id>', methods=['GET', 'POST'])
-def api_id(id):
+def mock_api(id):
     return render_template('index.html', id = id)
 
+
+# For fetching data
+@app.route('/get_data', methods=['GET'])
+def send_data():
+    df = pd.read_csv('static/data.csv')
+    data = df.to_json(orient='records')
+    
+    data_to_dict = json.loads(data)[0]
+    
+    print(type(data_to_dict))
+    return jsonify(data_to_dict)
 
 
 if __name__ == "__main__":
