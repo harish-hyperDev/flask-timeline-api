@@ -31,7 +31,72 @@
         .tooltip {
             border: 1px solid rgb(203, 203, 203);
             line-height: 1.6;
-            /* white-space: pre-wrap; */
+            white-space: pre-wrap;
+            width: 500px;
+            height: 500px;
+            overflow-y: scroll;
+
+
+        }
+
+        .pointed-arrow {
+            position: absolute;
+            left: 0;
+            top: 500px;
+            margin: 20px;
+
+            border-top: 10px solid transparent;
+            border-bottom: 21px solid rgb(219, 219, 219);
+            border-right: 10px solid transparent;
+            border-left: 10px solid transparent;
+
+            float: left;
+            height: 1px;
+            margin-top: 3px;
+
+            fill: none;
+            stroke: #646464;
+            stroke-width: 1px;
+            stroke-dasharray: 2, 2;
+            stroke-linejoin: round;
+        }
+
+        /* .tooltip:before {
+            content: "";
+            position:absolute;
+            top:-50px;
+            left:0;
+            height:40px;
+            width: 40px;
+            border-bottom-left-radius: 50%;
+            background:#000;
+            border: 1px solid rgb(203, 203, 203);
+
+            box-shadow: 0 20px 0 0 #fff;
+        } */
+
+
+
+        .tooltip:hover {
+            display: block;
+        }
+
+        .tooltip-close {
+            cursor: pointer;
+            border: 1px solid black;
+            font-weight: bold;
+            border-radius: 5px;
+
+            position: absolute;
+            left: 95%;
+            padding: 0px 5px;
+
+            transition: background-color 100ms linear;
+        }
+
+        .tooltip-close:hover {
+            background-color: rgb(219, 219, 219);
+            transition: background-color 300ms linear;
         }
 
         .computer-names {
@@ -62,15 +127,35 @@
         .ui-resizable-handle:hover {
             cursor: e-resize;
         }
+
+        .tooltip::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        .tooltip::-webkit-scrollbar-thumb {
+            border: 4px solid rgba(0, 0, 0, 0);
+            background-clip: padding-box;
+            border-radius: 15px;
+            height: 40px;
+
+            background-color: #AAAAAA;
+        }
+
+        .tooltip::-webkit-scrollbar-thumb:hover {
+            background-color: #888;
+        }
     </style>
 </head>
 
 <body>
+    <div class="pointed-arrow"></div>
+    <div class="tooltip">
+    </div>
 </body>
 <!-- <script src="./timeline.js"></script> -->
-<script> 
+<script>
     let fid = 0;
-    if("{{ id }}" || 0) {
+    if ("{{ id }}" || 0) {
         fid = "{{ id }}" || 0
     }
     console.log(fid)
