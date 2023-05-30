@@ -27,10 +27,7 @@ d3.csv("/static/data.csv", async function (err, data) {
         return data.map((x) => x[key]).filter((x, i, a) => a.indexOf(x) === i)
     }
 
-    console.log("data is : ", data)
     let uniqueComputers = getUniqueData("Opportunity ID").sort()
-
-    // console.log("unique opp ids : ", uniqueComputers)
 
 
     // let filterOppur = []
@@ -60,34 +57,9 @@ d3.csv("/static/data.csv", async function (err, data) {
         filterByOppurtunities = [...filterByOppurtunities, eachField]
     })
 
+    let uniqueOppurtunityIDs = filterByOppurtunities.map((opps) => opps['Opportunity ID']).filter((value, index, self) => self.indexOf(value) === index);
 
-
-    // console.log("filter by OPP : ")
-    // console.log(filterByOppurtunities)
-
-
-    // let uniqueUpdates = await data.map((d) => {
-    //     let space_count = 0;
-    //     let third_space_index = 0;
-    //     let str = d["Patch Name"]
-
-    //     for (let str_i = 0; str_i < str.length; str_i++) {
-    //         if (space_count === 3) {
-    //             third_space_index = str_i;
-    //             break;
-    //         }
-
-    //         if (str[str_i] === " ") {
-    //             space_count++
-    //         }
-    //     }
-
-    //     return (str.slice(0, third_space_index))
-    // })
-
-    let uniqueUpdates = ["hello", "hello", "world", "world"]
-
-    uniqueOppurtunityID = [...new Set(data['OppurtunityID'])]
+    // uniqueOppurtunityID = [...new Set(data['OppurtunityID'])]
     // console.log("opp id : ", uniqueOppurtunityID)
 
 
@@ -102,7 +74,7 @@ d3.csv("/static/data.csv", async function (err, data) {
     };
 
     var myColor = d3.scaleSequential()
-        .domain([0, uniqueUpdates.length])
+        .domain([0, uniqueOppurtunityIDs.length])
         .interpolator(d3.interpolateViridis);
 
 
@@ -118,14 +90,19 @@ d3.csv("/static/data.csv", async function (err, data) {
 
 
     let uniqueHexColors = d3.scaleQuantize()
-        .domain([0, 50])
+        .domain([0, 11])
         .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
             "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
+            
+        // previous color range
+        // .range(["#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
+        //     "#FFFFBF", "#FEE08B", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
+
 
     // previous colors
 
     /*d3.scaleLinear()
-        .domain([0, uniqueUpdates.length])
+        .domain([0, uniqueOppurtunityIDs.length])
         .range(["#a9a9a9", "#FFA500", "#FFC0CB"])*/
 
 
@@ -142,7 +119,10 @@ d3.csv("/static/data.csv", async function (err, data) {
     width = current_width - margin.left - margin.right
     height = current_height;
 
+
+
     function chart(multidata_index) {
+        // Sample data
         /* {
             Account Name: "hawaii state public library system"
             Opportunity ID: "0066T000016da6s"
@@ -164,11 +144,6 @@ d3.csv("/static/data.csv", async function (err, data) {
             filteredTimeline = filterByOppurtunities.filter((d, i) => {
                 return d["Opportunity ID"] === param
             })
-
-            console.log("Filter Timeline")
-            console.log(filteredTimeline)
-            console.log("params : ", param)
-
 
 
             // if the parameter has changed_width then all the remaining parameters are present too.
@@ -210,28 +185,12 @@ d3.csv("/static/data.csv", async function (err, data) {
             var x = d3.scaleTime()
                     .domain([d3.min(filteredTimeline, function (d) { let min_date = d3.min(d.validDatesWithData); return parseDate(min_date); }),
                             d3.max(filteredTimeline, function(d) { let max_date = d3.max(d.validDatesWithData); return parseDate(max_date); })
-                    ])
-                // .domain(d3.extent(filteredTimeline, function (d) { console.log("on x : ", d3.min(d.validDatesWithData)); return parseDate(d.validDatesWithData); }))
-                // .domain(d3.extent(filteredTimeline, function (d) {
-                //     let validDate = isValidDate()
-                //     if (validDate && fields[fieldKey] !== "") {
-
-                //         console.log(fieldKey)
-                //         eachField['validDatesWithData'] = [...eachField['validDatesWithData'], fieldKey]
-                //         eachField[fieldKey] = fields[fieldKey]
-                //     }
-                // }))
-                .range([0, width - margin.left - margin.right]);
+                        ])
+                    .range([0, width - margin.left - margin.right]);
 
             var xAxis = d3.axisBottom(x)
 
-            /* d3.selectAll(".dot").remove()
-            d3.selectAll(".x-axis").remove() */
-            // console.log("the filter : ", filteredTimeline)
-
-            console.log(filteredTimeline)
             let validDatesArray = filteredTimeline[0]['validDatesWithData']
-            console.log("valid Dates : ", validDatesArray)
             
             svg.selectAll(".dot")
                 .data(validDatesArray)
@@ -246,18 +205,19 @@ d3.csv("/static/data.csv", async function (err, data) {
 
                 /* Code for coloring dots on timeline */
 
-                // .attr("stroke", (d) => {
-                //     let uc
-                //     for (let i = 0; i < uniqueUpdates.length; i++) {
-                //         if (d["Opportunity Name"].includes(uniqueUpdates[i])) {
-                //             uc = uniqueHexColors(i)
-                //             break;
-                //         } else {
-                //             uc = "#FFC0CB"
-                //         }
-                //     }
-                //     return uc
-                // })
+                .attr("stroke", (d) => {
+                    let uc
+                    let currentOpportunity = filteredTimeline[0]['Opportunity ID']
+                    for (let i = 0; i < uniqueOppurtunityIDs.length; i++) {
+                        if (currentOpportunity.includes(uniqueOppurtunityIDs[i])) {
+                            uc = uniqueHexColors(i)
+                            break;
+                        } else {
+                            uc = "#FFC0CB"
+                        }
+                    }
+                    return uc
+                })
 
                 .attr("stroke-width", "2")
 
@@ -267,12 +227,6 @@ d3.csv("/static/data.csv", async function (err, data) {
 
                     svg.selectAll(".dot").style("cursor", "pointer");
                     svg.select("path").style("cursor", "pointer");
-
-                    // tooltip.html(`
-                    //             <strong>Opportunity Name: </strong>${filteredTimeline[0]["Opportunity Name"]} <br/> 
-                    //             <strong>Quantity: </strong>${filteredTimeline[0]["Quantity"]} <br/>
-                    //             <strong>Total Amount Required: </strong>${filteredTimeline[0]["Total Amount (Required)"]} <br/>
-                    //         `);
 
                     tooltip.html(`<div class="tooltip-close">X</div><div class="tooltip-text">${selectedDotDateText}<div>`)
 
@@ -301,24 +255,6 @@ d3.csv("/static/data.csv", async function (err, data) {
                 //     svg.select("path").style("cursor", "default");
                 //     return tooltip.style("visibility", "hidden")
                 // });
-
-
-
-            // svg.selectAll('.dot')
-            //     .data(validDatesArray).enter().append("circle")
-            //     .attr("class", "dot")
-            //     // .enter().append("circle")
-            //     .attr("cx", function(d) { 
-            //                     // console.log("will : ", d); return 90; 
-            //                     console.log("will : ", x(parseDate(d)))
-            //                     return x(parseDate(d))
-            //                 })
-            //     .attr("cy", height)
-            //     .attr("fill", "#fff")
-            //     .attr("r", 3)
-            //     .attr("stroke", "#000")
-
-            //     .attr("stroke-width", "1.5")
 
             svg.append("g")
                 .attr("class", "x-axis")
@@ -359,7 +295,6 @@ d3.csv("/static/data.csv", async function (err, data) {
         
 
         // TITLE of the chart
-        console.log("text title : ", filteredTimeline)
         document.getElementsByClassName(`opp-id${multidata_index}`)[0].innerHTML = `Opportunity ID: ${filteredTimeline[multidata_index]["Opportunity ID"]}`
         document.getElementsByClassName(`acc-name${multidata_index}`)[0].innerHTML = `Account Name: ${filteredTimeline[multidata_index]["Account Name"]}`
         document.getElementsByClassName(`opp-name${multidata_index}`)[0].innerHTML = `Opportunity Name: ${filteredTimeline[multidata_index]["Opportunity Name"]}`
@@ -407,9 +342,6 @@ d3.csv("/static/data.csv", async function (err, data) {
 
         if (!calledRedraw) {
             reDraw(uniqueComputers[multidata_index])
-            console.log("re draw")
-            console.log(uniqueComputers[multidata_index])
-            console.log("multi data index : ", multidata_index)
         }
     }
 
@@ -419,7 +351,6 @@ d3.csv("/static/data.csv", async function (err, data) {
         }
     } else {
         let idOnUrl = fid;
-        console.log("computers unique : ", uniqueComputers)
         let indexOfUrlInJsonData = uniqueComputers.indexOf(idOnUrl)
 
         chart(indexOfUrlInJsonData)
