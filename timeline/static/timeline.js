@@ -158,8 +158,8 @@ d3.csv("/static/data.csv", async function (err, data) {
                 return d["Opportunity ID"] === param
             })
 
-            // console.log("Filter Timeline")
-            // console.log(filteredTimeline)
+            console.log("Filter Timeline")
+            console.log(filteredTimeline)
             console.log("params : ", param)
 
 
@@ -222,37 +222,43 @@ d3.csv("/static/data.csv", async function (err, data) {
             d3.selectAll(".x-axis").remove() */
             // console.log("the filter : ", filteredTimeline)
 
+            console.log(filteredTimeline)
+            let validDatesArray = filteredTimeline[0]['validDatesWithData']
+            console.log("valid Dates : ", validDatesArray)
             
             svg.selectAll(".dot")
-                .data(filteredTimeline)
+                .data(validDatesArray)
                 .enter().append("circle")
                 .attr("class", "dot")
-                // .attr("cx", function (...d.validDatesWithData) { console.log(d); return x(parseDate(d.validDatesWithData)) })
-                .attr("cy", function (d) { return (height) })
-                .attr("fill", "#fff")
-                .attr("r", 2.5)
-                .attr("stroke", (d) => {
-                    let uc
-                    for (let i = 0; i < uniqueUpdates.length; i++) {
-                        if (d["Opportunity Name"].includes(uniqueUpdates[i])) {
-                            uc = uniqueHexColors(i)
-                            break;
-                        } else {
-                            uc = "#FFC0CB"
-                        }
-                    }
-                    return uc
-                })
 
-                .attr("stroke-width", "1.5")
+                .attr("cx", function (d) { console.log(d); return x(parseDate(d)) })
+                .attr("cy", height)
+                .attr("fill", "#fff")
+                .attr("r", 3)
+                .attr("stroke", "#000")
+                // .attr("stroke", (d) => {
+                //     let uc
+                //     for (let i = 0; i < uniqueUpdates.length; i++) {
+                //         if (d["Opportunity Name"].includes(uniqueUpdates[i])) {
+                //             uc = uniqueHexColors(i)
+                //             break;
+                //         } else {
+                //             uc = "#FFC0CB"
+                //         }
+                //     }
+                //     return uc
+                // })
+
+                .attr("stroke-width", "2")
+
                 .on("mouseover", (d) => {
                     svg.selectAll(".dot").style("cursor", "pointer");
                     svg.select("path").style("cursor", "pointer");
 
                     tooltip.html(`
-                                <strong>Opportunity Name: </strong>${d["Opportunity Name"]} <br/> 
-                                <strong>Quantity: </strong>${d["Quantity"]} <br/>
-                                <strong>Total Amount Required: </strong>${d["Total Amount (Required)"]} <br/>
+                                <strong>Opportunity Name: </strong>${filteredTimeline[0]["Opportunity Name"]} <br/> 
+                                <strong>Quantity: </strong>${filteredTimeline[0]["Quantity"]} <br/>
+                                <strong>Total Amount Required: </strong>${filteredTimeline[0]["Total Amount (Required)"]} <br/>
                             `);
 
                     return tooltip.style("visibility", "visible");
@@ -271,24 +277,23 @@ d3.csv("/static/data.csv", async function (err, data) {
                     return tooltip.style("visibility", "hidden")
                 });
 
-            let validDatesArray = filteredTimeline[0]['validDatesWithData']
-            console.log("valid Dates : ", validDatesArray)
+            
 
-            svg.selectAll('.dot')
-                .data(validDatesArray).enter().append("circle")
-                .attr("class", "dot")
-                // .enter().append("circle")
-                .attr("cx", function(d) { 
-                                // console.log("will : ", d); return 90; 
-                                console.log("will : ", x(parseDate(d)))
-                                return x(parseDate(d))
-                            })
-                .attr("cy", height)
-                .attr("fill", "#000")
-                .attr("r", 2.5)
-                
+            // svg.selectAll('.dot')
+            //     .data(validDatesArray).enter().append("circle")
+            //     .attr("class", "dot")
+            //     // .enter().append("circle")
+            //     .attr("cx", function(d) { 
+            //                     // console.log("will : ", d); return 90; 
+            //                     console.log("will : ", x(parseDate(d)))
+            //                     return x(parseDate(d))
+            //                 })
+            //     .attr("cy", height)
+            //     .attr("fill", "#fff")
+            //     .attr("r", 3)
+            //     .attr("stroke", "#000")
 
-                .attr("stroke-width", "1.5")
+            //     .attr("stroke-width", "1.5")
 
             svg.append("g")
                 .attr("class", "x-axis")
@@ -321,7 +326,8 @@ d3.csv("/static/data.csv", async function (err, data) {
             .append("div")
             .attr("class", `computer-id${multidata_index} computer-names`)
 
-        document.getElementsByClassName(`computer-id${multidata_index}`)[0].innerHTML = `${uniqueComputers[multidata_index]}`
+        // TITLE of the chart
+        document.getElementsByClassName(`computer-id${multidata_index}`)[0].innerHTML = `Opportunity Name: ${uniqueComputers[multidata_index]}`
 
 
         var svg = d3.select(`.timeline${multidata_index}`)
