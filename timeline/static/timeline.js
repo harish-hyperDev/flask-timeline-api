@@ -275,15 +275,17 @@ d3.csv("/static/data.csv", async function (err, data) {
 
                     document.getElementsByClassName("tooltip-close")[0]["onclick"] = closeTooltip;
                     
-                    return tooltip.style("visibility", "visible");
+                    return tooltip.style("visibility", "visible")
+                                    .style("top", (d3.event.pageY + 25) + "px")
+                                    .style("left", (d3.event.pageX - 15) + "px");  // was 15 before
                 })
 
-                .on("mousemove", () => {
+                // .on("mousemove", () => {
 
-                    return tooltip.style("top", (d3.event.pageY + 25) + "px")
-                        .style("left", (d3.event.pageX - 15) + "px")
+                //     return tooltip.style("top", (d3.event.pageY + 25) + "px")
+                //         .style("left", (d3.event.pageX - 15) + "px")
 
-                })
+                // })
 
                 
                 // .on("mouseout", () => {
