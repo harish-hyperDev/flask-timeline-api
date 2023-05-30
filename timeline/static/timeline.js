@@ -231,11 +231,14 @@ d3.csv("/static/data.csv", async function (err, data) {
                 .enter().append("circle")
                 .attr("class", "dot")
 
-                .attr("cx", function (d) { console.log(d); return x(parseDate(d)) })
+                .attr("cx", function (d) { return x(parseDate(d)) })
                 .attr("cy", height)
                 .attr("fill", "#fff")
                 .attr("r", 3)
                 .attr("stroke", "#000")
+
+                /* Code for coloring dots on timeline */
+
                 // .attr("stroke", (d) => {
                 //     let uc
                 //     for (let i = 0; i < uniqueUpdates.length; i++) {
@@ -251,15 +254,20 @@ d3.csv("/static/data.csv", async function (err, data) {
 
                 .attr("stroke-width", "2")
 
-                .on("mouseover", (d) => {
+                .on("mouseover", function (d) {
+
+                    let selectedDotDateText = filteredTimeline[0][d]
+
                     svg.selectAll(".dot").style("cursor", "pointer");
                     svg.select("path").style("cursor", "pointer");
 
-                    tooltip.html(`
-                                <strong>Opportunity Name: </strong>${filteredTimeline[0]["Opportunity Name"]} <br/> 
-                                <strong>Quantity: </strong>${filteredTimeline[0]["Quantity"]} <br/>
-                                <strong>Total Amount Required: </strong>${filteredTimeline[0]["Total Amount (Required)"]} <br/>
-                            `);
+                    // tooltip.html(`
+                    //             <strong>Opportunity Name: </strong>${filteredTimeline[0]["Opportunity Name"]} <br/> 
+                    //             <strong>Quantity: </strong>${filteredTimeline[0]["Quantity"]} <br/>
+                    //             <strong>Total Amount Required: </strong>${filteredTimeline[0]["Total Amount (Required)"]} <br/>
+                    //         `);
+
+                    tooltip.html(`<div class="tooltip-text">${selectedDotDateText}</div>`)
 
                     return tooltip.style("visibility", "visible");
                 })
@@ -271,11 +279,11 @@ d3.csv("/static/data.csv", async function (err, data) {
 
                 })
 
-                .on("mouseout", () => {
-                    svg.selectAll(".dot").style("cursor", "default");
-                    svg.select("path").style("cursor", "default");
-                    return tooltip.style("visibility", "hidden")
-                });
+                // .on("mouseout", () => {
+                //     svg.selectAll(".dot").style("cursor", "default");
+                //     svg.select("path").style("cursor", "default");
+                //     return tooltip.style("visibility", "hidden")
+                // });
 
             
 
@@ -300,34 +308,40 @@ d3.csv("/static/data.csv", async function (err, data) {
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
-
-            
-
-            
         }
 
 
-        var tooltip = d3.select("body")
-            .append("div")
-            .attr('class', 'tooltip')
-            .style("position", "absolute")
-            .style("z-index", "10")
-            .style("visibility", "hidden")
-            .style("background", "#fff")
-            .style("padding", "5px")
-            .style("border-radius", "7px")
-            .text("");
+        var tooltip = d3.select(".tooltip")
+                        .style("position", "absolute")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+                        .style("background", "#fff")
+                        .style("padding", "5px")
+                        .style("border-radius", "7px")
+                        .text("");
 
         d3.select("body")
             .append("div")
             .attr("class", `timeline${multidata_index}`)
 
+        // div for TITLE of chart
+        
         d3.select(`.timeline${multidata_index}`)
             .append("div")
-            .attr("class", `computer-id${multidata_index} computer-names`)
+            .attr("class", `acc-name${multidata_index} computer-names`)
+
+        d3.select(`.timeline${multidata_index}`)
+            .append("div")
+            .attr("class", `opp-name${multidata_index} computer-names`)
+        
 
         // TITLE of the chart
-        document.getElementsByClassName(`computer-id${multidata_index}`)[0].innerHTML = `Opportunity Name: ${uniqueComputers[multidata_index]}`
+        console.log("text title : ", filteredTimeline)
+        document.getElementsByClassName(`opp-name${multidata_index}`)[0].innerHTML = `Opportunity Name: ${filteredTimeline[multidata_index]["Opportunity Name"]}`
+        document.getElementsByClassName(`acc-name${multidata_index}`)[0].innerHTML = `Account Name: ${filteredTimeline[multidata_index]["Account Name"]}`
+
+        // document.getElementsByClassName(`computer-id${multidata_index}`)[0].innerHTML = `Opportunity Name: ${uniqueComputers[multidata_index]}`
+
 
 
         var svg = d3.select(`.timeline${multidata_index}`)
