@@ -14,13 +14,16 @@ function closeTooltip() {
         .style("visibility", "hidden")
     d3.select('.pointed-arrow')
         .style("visibility", "hidden")
+
+    d3.select(".pointed-arrow").style("visibility", "hidden")
+    
 }
 
 fetch('/get_data')
     .then(response => response.json())
     .then(responseData => {
         // Handle the received JSON data here
-        var data = [responseData]
+        var data = responseData
         console.log(data);
 
         const getUniqueData = (key) => {
@@ -227,6 +230,7 @@ fetch('/get_data')
 
                         svg.selectAll(".dot").style("cursor", "pointer");
                         svg.select("path").style("cursor", "pointer");
+                        d3.select(".pointed-arrow").style("visibility", "visible")
 
                         tooltip.html(`<div class="tooltip-close">X</div><div class="tooltip-text">${selectedDotDateText}<div>`)
 

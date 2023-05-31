@@ -35,12 +35,27 @@
             width: 500px;
             height: 500px;
             overflow-y: scroll;
-
-
+            visibility: hidden;
         }
+
+        /*
+        .tooltip::before {
+            content : " ";
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #646464;
+            position:absolute;
+            bottom:-5px;
+            left:5px; 
+        }
+        */
 
         .pointed-arrow {
             position: absolute;
+            visibility: hidden;
+
             left: 0;
             top: 500px;
             margin: 20px;
@@ -152,15 +167,13 @@
     <div class="tooltip">
     </div>
 </body>
-<!-- <script src="./timeline.js"></script> -->
 <script>
     let fid = 0;
     if ("{{ id }}" || 0) {
         fid = "{{ id }}" || 0
     }
 
-    console.log("hello")
-
+    console.log({{ json_data }})
 </script>
 <script src="{{url_for('static', filename='timeline.js')}}"></script>
 
