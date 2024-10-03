@@ -1,2 +1,4 @@
 Flask == 2.3.2
 pandas --no-binary pandas
+gunicorn==23.0.0
+waitress==3.0.0
